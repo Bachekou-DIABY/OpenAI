@@ -1,0 +1,1 @@
+L'url pour tester le chat coté front est localhost:3001/chat

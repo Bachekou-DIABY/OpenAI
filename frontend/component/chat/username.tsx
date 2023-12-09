@@ -19,13 +19,15 @@ const Username = ({socket, setUsername}: Props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="m-3" onSubmit={handleSubmit}>
       <input 
+        placeholder="Entrez votre nom d'utilisateur"
+        className="rounded-lg my-2 mr-2 p-3"
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <button type="submit">Submit</button>
+      <button className="btn btn-accent" type="submit">Valider</button>
     </form>
   )
 }

@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import { Socket } from "socket.io-client";
 
 export interface IMessage {
@@ -16,20 +16,23 @@ interface Props {
   translatedContent?: IMessage;
 }
 const Message = ({socket, username, message, isMe, translatedContent }: Props) => {
-  const handleTranslate = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const targetLanguage = e.target.value;
-    socket.emit('chat-translate', {
-      username,
-      timeSent: message.timeSent,
-      content: message.content,
-      targetLanguage: targetLanguage,
-    });
-    console.log(message.username,message.timeSent,message.content,targetLanguage)
+  const [text, setText] = useState("");
 
+  const handleTranslate = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (text != null || text != "") {
+      socket.emit("chat-translate", {
+        username,
+        targetLanguage: text,
+        content:message.content,
+        timeSent: message.timeSent,
+      });
+      setText("");
+    }
   };
 
   return (
-    <div className={`chat ${isMe ? "chat-start" : "chat-end"}`}>
+    <div className= {` chat ${isMe ? "chat-start" : "chat-end"}`}>
       <div className="chat-header">
         {message.username}
         <time className="text-xs opacity-50">{message.timeSent}</time>
@@ -39,17 +42,16 @@ const Message = ({socket, username, message, isMe, translatedContent }: Props) =
       >
         {translatedContent?.content || message.content}
       </div>
-      <div className="chat-footer">
-        <label >Traduction: </label>
-        <select
-          onChange={handleTranslate}
-        >
-          <option value="">Langue</option>
-          <option value="French">Français</option>
-          <option value="English">Anglais</option>
-          <option value="Spanish">Espagnol</option>
-        </select>
-      </div>
+      <form onSubmit={handleTranslate} className="chat-footer">
+          <input 
+          placeholder="Indiquez la langue voulue"
+          className="rounded-lg pl-3 my-2 mr-2"
+          type="text"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button>Traduire</button>
+      </form>
     </div>
   );
 };

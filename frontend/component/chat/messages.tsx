@@ -3,7 +3,6 @@ import { IMessage } from "./message";
 import Message from "./message";
 import { Socket, io } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
 
 interface MessagesProps {
   socket:Socket;
@@ -11,7 +10,7 @@ interface MessagesProps {
   username: string;
 }
 
-const Messages: React.FC<MessagesProps> = ({ messages, username }) => {
+const Messages: React.FC<MessagesProps> = ({ socket,messages, username }) => {
 
   return (
     <div>
